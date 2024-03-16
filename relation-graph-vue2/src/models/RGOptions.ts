@@ -169,7 +169,8 @@ export const createDefaultConfig = (userOptions:RGV2Options):RGOptionsFull => {
     },
     data: {
 
-    }
+    },
+    zoomStep:10
   };
   _options.newLineTemplate = json2Line(_options.newLineTemplate);
   if (userOptions.layout && userOptions.layouts) {

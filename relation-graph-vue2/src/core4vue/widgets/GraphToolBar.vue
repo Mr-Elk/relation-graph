@@ -6,11 +6,11 @@
     <div v-if="options.allowShowFullscreenMenu" title="全屏/退出全屏" class="c-mb-button" style="margin-top: 0px;" @click="relationGraph.fullscreen();">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-resize-"></use></svg>
     </div>
-    <div v-if="options.allowShowZoomMenu" title="放大" class="c-mb-button" @click="relationGraph.zoom(20)">
+    <div v-if="options.allowShowZoomMenu" title="放大" class="c-mb-button" @click="relationGraph.zoom(options.zoomStep)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
     </div>
     <div v-if="options.allowShowZoomMenu" class="c-current-zoom" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
-    <div v-if="options.allowShowZoomMenu" title="缩小" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(-20)">
+    <div v-if="options.allowShowZoomMenu" title="缩小" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(options.zoomStep * -1)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
     </div>
     <div v-if="options.allowAutoLayoutIfSupport && options.isNeedShowAutoLayoutButton" :title="options.autoLayouting?'点击停止自动布局':'点击开始自动调整布局'" :class="{'c-mb-button-on':options.autoLayouting}" class="c-mb-button" @click="toggleAutoLayout">
@@ -42,6 +42,8 @@ export default {
       return this.graph.instance;
     },
     options() {
+      // 打印一下options 后面删掉
+      console.log("this.graph.options", this.graph.options)
       return this.graph.options;
     }
   },

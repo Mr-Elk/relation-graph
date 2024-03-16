@@ -4,13 +4,13 @@
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-resize-"></use></svg>
       <span class="c-mb-text">{{ options.fullscreen?'退出':'全屏' }}</span>
     </div>
-    <div v-if="options.allowShowZoomMenu" class="c-mb-button" @click="relationGraph.zoom(20)">
+    <div v-if="options.allowShowZoomMenu" class="c-mb-button" @click="relationGraph.zoom(options.zoomStep)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
-      <span class="c-mb-text">放大</span>
+      <span class="c-mb-text">放大Alex</span>
     </div>
     <div v-if="options.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
-    <!--<div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;">{{ hits }}</div>-->
-    <div v-if="options.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(-20)">
+    <div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;">{{ hits }}</div>
+    <div v-if="options.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(options.zoomStep * -1)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
       <span class="c-mb-text">缩小</span>
     </div>
@@ -120,6 +120,7 @@ export default {
       return this.graph.instance;
     },
     options() {
+      console.log("this.graph.options", this.graph.options)
       return this.graph.options;
     }
   },

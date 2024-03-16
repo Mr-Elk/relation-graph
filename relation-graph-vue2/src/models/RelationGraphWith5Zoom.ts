@@ -14,8 +14,11 @@ export class RelationGraphWith5Zoom extends RelationGraphWith4Line {
     super(options, listeners);
   }
 
+  // 放缩的方法
   zoom(buff:number, userZoomCenter?:RGZoomCenter) {
     // devLog('[zoom]', buff, 'from:', userZoomCenter);
+    console.log("this.options.canvasZoom 是什么", this.options.canvasZoom)
+    console.log("buff 是什么", buff)
     if ((this.options.canvasZoom + buff) < 10) {
       return;
     }

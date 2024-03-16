@@ -2,12 +2,17 @@ import {version} from "../constants";
 import * as screenfull from "screenfull";
 import * as html2canvas from "html2canvas";
 
+// 获取屏幕宽度
 export const getScreenWidth = () => {
   return window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
 };
+
+// 获取屏幕高度
 export const getScreenHeight = () => {
   return window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
 };
+
+// 处理颜色色值
 export const getColorId = (color:string) => {
   color = color.replace('#', '');
   color = color.replace('(', '');
@@ -15,6 +20,8 @@ export const getColorId = (color:string) => {
   color = color.replace(/,/, '-');
   return color;
 };
+
+// 好像没用过？
 export const getLightColor = (col:string) => {
   if (col[0] === '#') {
     let _s = col.slice(1);
@@ -44,6 +51,7 @@ export const getLightColor = (col:string) => {
     return col;
   }
 };
+// 获取文本宽度
 export const getTextSize = (text:string) => {
   let width = 0;
   for (const _thisChar of text) {
