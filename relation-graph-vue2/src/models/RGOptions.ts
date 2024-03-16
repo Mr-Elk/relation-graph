@@ -170,7 +170,9 @@ export const createDefaultConfig = (userOptions:RGV2Options):RGOptionsFull => {
     data: {
 
     },
-    zoomStep:10
+    zoomStep:10, // 放缩时的步长 应为整数
+    toolbarWidth: 260, 
+    toolbarHeight: 45,
   };
   _options.newLineTemplate = json2Line(_options.newLineTemplate);
   if (userOptions.layout && userOptions.layouts) {

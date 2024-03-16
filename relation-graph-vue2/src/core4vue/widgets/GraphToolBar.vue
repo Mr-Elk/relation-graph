@@ -1,6 +1,7 @@
 <template>
   <div
       class="rel-toolbar"
+      :style="divStyle"
       :class="['rel-toolbar-h-' + options.toolBarPositionH, 'rel-toolbar-v-' + options.toolBarPositionV, 'rel-toolbar-' + options.toolBarDirection]"
   >
     <div v-if="options.allowShowFullscreenMenu" title="全屏/退出全屏" class="c-mb-button" style="margin-top: 0px;" @click="relationGraph.fullscreen();">
@@ -34,6 +35,10 @@ export default {
   name: 'GraphMiniToolBar',
   data() {
     return {
+      divStyle: {
+        height: '45px',
+        width: '260px'
+      }
     };
   },
   inject: ['graph'],
@@ -46,6 +51,9 @@ export default {
       console.log("this.graph.options", this.graph.options)
       return this.graph.options;
     }
+  },
+  created() {
+    this.initToolbarStyle()
   },
   mounted() {
   },
@@ -69,6 +77,10 @@ export default {
       await this.relationGraph.setZoom(100);
       await this.relationGraph.moveToCenter();
       await this.relationGraph.zoomToFit();
+    },
+    initToolbarStyle() {
+      this.divStyle.height = this.options.toolbarHeight + 'px'
+      this.divStyle.width = this.options.toolbarWidth + 'px'
     }
   }
 };

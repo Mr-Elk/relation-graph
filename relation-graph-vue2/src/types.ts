@@ -271,6 +271,8 @@ export interface RGOptions {
   layouts?: RGLayoutOptions[]
   layout?: RGLayoutOptions
   zoomStep?: number
+  toolbarWidth?: number
+  toolbarHeight?: number
 }
 export type RGLineColorItem = {
   id: string, color: string
