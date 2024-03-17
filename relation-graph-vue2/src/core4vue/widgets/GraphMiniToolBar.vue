@@ -8,7 +8,10 @@
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
       <span class="c-mb-text">放大</span>
     </div>
-    <div v-if="options.allowShowZoomMenu" style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
+    <div v-if="options.allowShowZoomMenu&&!options.showInputToolbar" class="c-current-zoom" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
+    <div v-if="options.showInputToolbar" class="c-current-zoom">
+      <input type="text" class="c-current-zoom-input" maxlength="3" v-model="zoomRatio" @blur="changeZoomRatio" @keyup.enter="changeZoomRatio" @input="handleInputNumber">
+    </div>
     <div style="float:left;margin-top:0px;height:20px;width:40px;border-top:0px;border-bottom:0px;background-color: #ffffff;color: #262626;font-size: 10px;background-color: #efefef;text-align: center;line-height: 20px;">{{ hits }}</div>
     <div v-if="options.allowShowZoomMenu" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(options.zoomStep * -1)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
@@ -111,7 +114,9 @@ export default {
     return {
       height: 275,
       hits: 0,
-      downloadPanelWidth: 106
+      downloadPanelWidth: 106,
+      zoomRatio: '100%',
+      resultZoom: '100%'
     };
   },
   inject: ['graph'],
@@ -120,7 +125,6 @@ export default {
       return this.graph.instance;
     },
     options() {
-      console.log("this.graph.options", this.graph.options)
       return this.graph.options;
     }
   },
@@ -152,6 +156,35 @@ export default {
       await this.relationGraph.setZoom(100);
       await this.relationGraph.moveToCenter();
       await this.relationGraph.zoomToFit();
+    },
+    changeZoomRatio() {
+      if( parseInt(this.resultZoom) > 100 ){
+        this.zoomRatio = '100'
+      } else if (parseInt(this.resultZoom) < 20) {
+        this.zoomRatio = '20'
+      }
+      this.resultZoom = this.zoomRatio
+      this.zoomToAssignedValue(this.resultZoom)
+    },
+    handleInputNumber(event:any) {
+      const inputValue = event.target.value
+      this.zoomRatio = inputValue.replace(/[^0-9]/g,'')
+      this.resultZoom = this.zoomRatio
+    },
+    async zoomToAssignedValue(value: string) {
+      let zoomRatio = parseInt(value)
+      await this.relationGraph.setZoom(zoomRatio);
+      // await this.relationGraph.moveToCenter();
+      // await this.relationGraph.zoomToFit();
+    },
+  },
+  watch: {
+    'options.canvasZoom': {
+      handler(newVal, oldVal) {
+        this.zoomRatio = this.options.canvasZoom
+        this.resultZoom = this.options.canvasZoom
+      },
+      immediate: true
     }
   }
 };
@@ -164,6 +197,20 @@ export default {
     vertical-align: -3px;
     fill: currentColor;
     overflow: hidden;
+  }
+  .toolbar-input-container {
+    float:left;
+    margin-top:0px;
+    height:20px;
+    width:70px;
+    border-top:0px;
+    border-bottom:0px;
+    background-color: #ffffff;
+    color: #262626;
+    font-size: 10px;
+    background-color: #efefef;
+    text-align: center;
+    line-height: 20px;
   }
   .c-mini-toolbar{
     width:44px;

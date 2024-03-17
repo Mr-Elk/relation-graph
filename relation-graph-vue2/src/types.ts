@@ -273,6 +273,7 @@ export interface RGOptions {
   zoomStep?: number
   toolbarWidth?: number
   toolbarHeight?: number
+  showInputToolbar?: boolean
 }
 export type RGLineColorItem = {
   id: string, color: string

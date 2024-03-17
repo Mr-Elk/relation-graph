@@ -10,7 +10,10 @@
     <div v-if="options.allowShowZoomMenu" title="放大" class="c-mb-button" @click="relationGraph.zoom(options.zoomStep)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-fangda"></use></svg>
     </div>
-    <div v-if="options.allowShowZoomMenu" class="c-current-zoom" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
+    <div v-if="options.allowShowZoomMenu&&!options.showInputToolbar" class="c-current-zoom" @dblclick="zoomToFit">{{ options.canvasZoom }}%</div>
+    <div v-if="options.showInputToolbar" class="c-current-zoom">
+      <input type="text" class="c-current-zoom-input" maxlength="3" v-model="zoomRatio" @blur="changeZoomRatio" @keyup.enter="changeZoomRatio" @input="handleInputNumber">
+    </div>
     <div v-if="options.allowShowZoomMenu" title="缩小" class="c-mb-button" style="margin-top:0px;" @click="relationGraph.zoom(options.zoomStep * -1)">
       <svg class="rg-icon" aria-hidden="true"><use xlink:href="#icon-suoxiao"></use></svg>
     </div>
@@ -38,7 +41,9 @@ export default {
       divStyle: {
         height: '45px',
         width: '260px'
-      }
+      },
+      zoomRatio: '100%',
+      resultZoom: '100%'
     };
   },
   inject: ['graph'],
@@ -47,8 +52,6 @@ export default {
       return this.graph.instance;
     },
     options() {
-      // 打印一下options 后面删掉
-      console.log("this.graph.options", this.graph.options)
       return this.graph.options;
     }
   },
@@ -81,10 +84,44 @@ export default {
     initToolbarStyle() {
       this.divStyle.height = this.options.toolbarHeight + 'px'
       this.divStyle.width = this.options.toolbarWidth + 'px'
+    },
+    changeZoomRatio() {
+      if( parseInt(this.resultZoom) > 100 ){
+        this.zoomRatio = '100'
+      } else if (parseInt(this.resultZoom) < 20) {
+        this.zoomRatio = '20'
+      }
+      this.resultZoom = this.zoomRatio
+      this.zoomToAssignedValue(this.resultZoom)
+    },
+    handleInputNumber(event:any) {
+      const inputValue = event.target.value
+      this.zoomRatio = inputValue.replace(/[^0-9]/g,'')
+      this.resultZoom = this.zoomRatio
+    },
+    async zoomToAssignedValue(value: string) {
+      let zoomRatio = parseInt(value)
+      await this.relationGraph.setZoom(zoomRatio);
+      // await this.relationGraph.moveToCenter();
+      // await this.relationGraph.zoomToFit();
+    },
+  },
+  watch: {
+    'options.canvasZoom': {
+      handler(newVal, oldVal) {
+        this.zoomRatio = this.options.canvasZoom
+        this.resultZoom = this.options.canvasZoom
+      },
+      immediate: true
     }
   }
 };
 </script>
 <style lang="scss">
 @import '../relation-graph-toolbar.scss';
+.c-current-zoom-input {
+  width: 26px;
+  border-radius: 4px;
+  text-align: center;
+}
 </style>
